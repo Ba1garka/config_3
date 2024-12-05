@@ -1,0 +1,20 @@
+{
+  "config": {
+    "pip_pip": 314,
+    "pip": {
+      "variable1": "Hello",
+      "eeeee": 2718
+    }
+  },
+  "variable_": "Hello_world_!",
+  "con": {
+    "pi": 3.14,
+    "e": 2.718
+  },
+  "variable2": 42,
+  "constants": {
+    "pi": 3.14,
+    "e": 2.718
+  }
+}
+
