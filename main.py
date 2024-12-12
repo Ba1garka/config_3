@@ -2,6 +2,7 @@ import json
 import re
 import sys
 from collections import OrderedDict
+from datetime import datetime
 
 
 def format_constants(constants, indent_level=1):
@@ -23,7 +24,7 @@ def format_value(value, indent_level=1):
         return str(value)
     elif isinstance(value, list):
         items = [format_value(item, indent_level + 1) for item in value]
-        return f"[\n{indent}    {',\n' + indent + '    '.join(items)}\n{indent}    ]"  # Обработка списков
+        return f"[\n{indent}    {',\n' + indent + '    '.join(items)}\n{indent}    ]"  # Handle lists
     elif isinstance(value, dict):
         return format_dict(value, indent_level + 1)
     else:
@@ -39,46 +40,65 @@ def format_dict(d, indent_level=1):
     for key, value in d.items():
         if not is_valid_name(key):
             raise ValueError(f"Invalid name '{key}'")
+
         if key == 'constants':
             items.append(f"{indent}{key} = {{\n")
             for const_key in value:
                 items.append(f"{indent}    {const_key} = @[ {const_key} ]")
-                # Запятая после каждого члена constants, кроме последнего
                 if const_key != list(value)[-1]:
                     items.append(',\n')
-            items.append(f"\n{indent}}}")  # Закрывающая скобка без запятой
-
-            # Добавляем запятую после закрывающей скобки, если это не последний элемент
+            items.append(f"\n{indent}}}")  # Closing brace without comma
             if current_key_index < total_keys - 1:
                 items.append(',\n')
-
             current_key_index += 1
             continue
 
-        item = f"{indent}{key} = {format_value(value, indent_level)}"  # Время работы с элементами
+        item = f"{indent}{key} = {format_value(value, indent_level)}"
         items.append(item)
-
-        # Запятая после элемента, если это не последний элемент в общем словаре
         if current_key_index < total_keys - 1:
             items.append(',\n')
-
         current_key_index += 1
 
-    output = f"{{\n" + "".join(items).rstrip(',\n') + f"\n{indent[:-4]}}}"  # Убрали отступ от закрывающей скобки
+    output = f"{{\n" + "".join(items).rstrip(',\n') + f"\n{indent[:-4]}}}"
     return output
 
 
 def is_valid_name(name):
-    return bool(re.match(r'^[a-z][a-z0-9_]*$', name))
+    return bool(re.match(r'[a-z][a-z0-9_]*', name))
+
+
+def find_time_key(data, time_key='time'):
+    """Ищет ключ time в любом месте JSON."""
+    if isinstance(data, dict):
+        if time_key in data:
+            return data[time_key]
+        for value in data.values():
+            found = find_time_key(value, time_key)
+            if found is not None:
+                return found
+    elif isinstance(data, list):
+        for item in data:
+            found = find_time_key(item, time_key)
+            if found is not None:
+                return found
+    return None
 
 
 def json_to_custom_config(json_data):
     constants = json_data.get('constants', {})
+
+    # Ищем значение ключа 'time' по всему JSON
+    time_value = find_time_key(json_data)
+
+    # Получаем текущее время в формате ISO 8601
+    iso_time = datetime.now().isoformat()
+
+    # Создаем определение time, если оно указано в JSON
+    time_definition = f"(define {time_value} {iso_time});\n" if time_value else ""
+
     constant_definitions = format_constants(constants)
-    formatted_dict = format_dict(json_data)
-    return constant_definitions + formatted_dict
-
-
+    formatted_dict = format_dict(json_data)  # Не передаем time_value, так как он уже в определении
+    return time_definition + constant_definitions + formatted_dict
 def main():
     if len(sys.argv) != 2:
         print("Usage: python script.py <path_to_json_file>")
