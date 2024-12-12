@@ -84,4 +84,5 @@ q(имя)
 
 ![Снимок экрана (179)](https://github.com/user-attachments/assets/5db82b13-c897-4bfe-bbf2-d4781dffec8a)
 
-![Снимок экрана (178)](https://github.com/user-attachments/assets/df60f9c5-221e-4755-8b33-687603f324b2)
+![Снимок экрана (187)](https://github.com/user-attachments/assets/ce1be563-7c4c-4720-8c27-c0eaa5c394ea)
+
