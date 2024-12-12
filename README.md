@@ -78,11 +78,11 @@ q(имя)
   
 ### Файл json
 
-![Снимок экрана (177)](https://github.com/user-attachments/assets/c5115c02-706c-44bb-aaf5-15bfaf6b4a09)
+![Снимок экрана (186)](https://github.com/user-attachments/assets/587155de-1b40-4159-b810-a18e4cae882c)
 
 ### Тестирование
 
-![Снимок экрана (179)](https://github.com/user-attachments/assets/5db82b13-c897-4bfe-bbf2-d4781dffec8a)
+![Снимок экрана (185)](https://github.com/user-attachments/assets/5541afce-1e7f-4e8d-90af-b019016ab160)
 
 ![Снимок экрана (187)](https://github.com/user-attachments/assets/ce1be563-7c4c-4720-8c27-c0eaa5c394ea)
 
