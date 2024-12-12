@@ -47,7 +47,7 @@ def format_dict(d, indent_level=1):
                 items.append(f"{indent}    {const_key} = @[ {const_key} ]")
                 if const_key != list(value)[-1]:
                     items.append(',\n')
-            items.append(f"\n{indent}}}")  # Closing brace without comma
+            items.append(f"\n{indent}}}")
             if current_key_index < total_keys - 1:
                 items.append(',\n')
             current_key_index += 1
@@ -87,17 +87,14 @@ def find_time_key(data, time_key='time'):
 def json_to_custom_config(json_data):
     constants = json_data.get('constants', {})
 
-    # Ищем значение ключа 'time' по всему JSON
     time_value = find_time_key(json_data)
 
-    # Получаем текущее время в формате ISO 8601
     iso_time = datetime.now().isoformat()
 
-    # Создаем определение time, если оно указано в JSON
     time_definition = f"(define {time_value} {iso_time});\n" if time_value else ""
 
     constant_definitions = format_constants(constants)
-    formatted_dict = format_dict(json_data)  # Не передаем time_value, так как он уже в определении
+    formatted_dict = format_dict(json_data)
     return time_definition + constant_definitions + formatted_dict
 def main():
     if len(sys.argv) != 2:
